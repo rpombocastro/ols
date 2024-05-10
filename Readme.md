@@ -12,15 +12,43 @@ Aplicacións instaladas:
 - Python WSGI LSAPI 2.1 (Para Python 3.10)
 - Drivers de base de datos sqllite e myslq para Python (as aplicacións clientes)
 
-
-
-NOTA: OpenLiteSpeed so permite despligue de aplicacións de Python a través de WSGI, utilizando a aplicación LiteSpeed Sever API (LSAPI) e que en este momento so está actualizada ata a versión 3.10.
-
-https://www.litespeedtech.com/open-source/litespeed-sapi/download
-
+### Creación de la imagen en Docker
 ```
 docker build --tag ols:1.0.0 -- build-arg proj=simple .
 ```
+
+### Lanzamiento del contenedor
+```
+docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
+```
+
+### Estrucutura datos
+
+├── configs
+│   ├── admin_config.conf
+│   ├── http_config.conf
+│   ├── ols.conf
+│   └── vhost.conf.seed
+├── web
+│   ├── logs
+│   ├── private
+│   └── public
+├── Dockerfile
+└── entrypoint.sh
+
+- configs
+ - admin_config.conf > configuramos el servidor de administración, podemos deshabilitarlo con este código:
+ ```
+ accessControl {
+  allow                 ALL
+  #  deny                  ALL
+ }
+ ```
+
+> [!TIP]
+> OpenLiteSpeed so permite despligue de aplicacións de Python a través de WSGI, utilizando a aplicación LiteSpeed Sever API (LSAPI) e que en este momento so está preparada para a versión 3.10.
+> https://www.litespeedtech.com/open-source/litespeed-sapi/download
+
 
 
 > [!NOTE]
