@@ -24,6 +24,7 @@ docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
 
 ### Estrucutura datos
 
+```bash
 ├── configs
 │   ├── admin_config.conf
 │   ├── http_config.conf
@@ -35,6 +36,7 @@ docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
 │   └── public
 ├── Dockerfile
 └── entrypoint.sh
+```
 
 - configs
     - admin_config.conf > configuramos el servidor de administración, podemos deshabilitarlo con este código:
@@ -49,7 +51,7 @@ docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
 > OpenLiteSpeed so permite despligue de aplicacións de Python a través de WSGI, utilizando a aplicación LiteSpeed Sever API (LSAPI) e que en este momento so está preparada para a versión 3.10.
 > https://www.litespeedtech.com/open-source/litespeed-sapi/download
 
-
+***
 
 > [!NOTE]
 > O proxecto está preparado para a plataforma de Kubernetes de Akamai, non deberías ter problema para desplegalo en outra plataforma baixo Kubernetes.
