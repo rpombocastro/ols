@@ -37,7 +37,7 @@ docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
 └── entrypoint.sh
 
 - configs
- - admin_config.conf > configuramos el servidor de administración, podemos deshabilitarlo con este código:
+    - admin_config.conf > configuramos el servidor de administración, podemos deshabilitarlo con este código:
  ```
  accessControl {
   allow                 ALL
