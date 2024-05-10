@@ -18,10 +18,13 @@ NOTA: OpenLiteSpeed so permite despligue de aplicacións de Python a través de 
 
 https://www.litespeedtech.com/open-source/litespeed-sapi/download
 
+```
+docker build --tag ols:1.0.0 -- build-arg proj=simple .
+```
 
 
 > [!NOTE]
-> O proxecto está preparado para a plataforma de Kubernetes de Akamai, non debería ter problema para desplegalo en outra plataforma baixo Kubernetes.
+> O proxecto está preparado para a plataforma de Kubernetes de Akamai, non deberías ter problema para desplegalo en outra plataforma baixo Kubernetes.
 
 > [!IMPORTANT]
 > Todo esto é info que saquei de outros repositorios ou aprendín eu, espero que che valga.
