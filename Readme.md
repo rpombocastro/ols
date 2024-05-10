@@ -4,13 +4,15 @@ Todas as imaxes van con php instalado, xa que o necesitan para a web de administ
 
 En este momento a máquina instala o seguinte software:
 - Ubuntu 24.04 LST
-- Python 3.10.14
 - OpenLiteSpeed 1.7.19 (A versión estable)
+
+## Python:
+Aplicacións instaladas:
+- Python 3.10.14
 - Python WSGI LSAPI 2.1 (Para Python 3.10)
 - Drivers de base de datos sqllite e myslq (as aplicacións clientes)
 
-## Python:
-OpenLiteSpeed so permite despligue de aplicacións de Python a través de WSGI, utilizando a aplicación LiteSpeed Sever API (LSAPI) e que en este momento so está actualizada ata a versión 3.10.
+NOTA: OpenLiteSpeed so permite despligue de aplicacións de Python a través de WSGI, utilizando a aplicación LiteSpeed Sever API (LSAPI) e que en este momento so está actualizada ata a versión 3.10.
 
 https://www.litespeedtech.com/open-source/litespeed-sapi/download
 
