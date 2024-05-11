@@ -6,6 +6,10 @@ En este momento a máquina instala o seguinte software:
 - Ubuntu 24.04 LST
 - OpenLiteSpeed 1.7.19 (A versión estable)
 
+> [!IMPORTANT]
+> As aplicacións despleganse mediante LSAPI:
+> https://www.litespeedtech.com/docs/lsapi
+
 ## Python:
 Aplicacións instaladas:
 - Python 3.10.14
@@ -26,16 +30,16 @@ docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
 
 ```bash
 ├── configs
-│   ├── admin_config.conf
-│   ├── http_config.conf
-│   ├── ols.conf
-│   └── vhost.conf.seed
+│   ├── admin_config.conf # configuración do portal de administración de OpenLiteSpeed
+│   ├── http_config.conf  # configuración do servidor web principal
+│   ├── ols.conf          # configuración da instalación de OpenLiteSpeed
+│   └── vhost.conf.seed   # configuración do host da apliación de Python
 ├── web
-│   ├── logs
-│   ├── private
-│   └── public
-├── Dockerfile
-└── entrypoint.sh
+│   ├── logs              # carpeta que se uutiliza para os logs do vhost
+│   ├── private           # aquí gardamos os archivos de configuración da aplicación (secret.json, requirements.txt)
+│   └── public            # aquí gardamos a aplicación de Django
+├── Dockerfile            # archivos de configuración de Docker 
+└── entrypoint.sh         # archivo que lanza o servidor OpenLiteSpeed
 ```
 
 - configs

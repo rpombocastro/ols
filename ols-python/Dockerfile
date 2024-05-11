@@ -1,12 +1,15 @@
-# VERSIÓN UBUNTU LST MÁS NUEVA
-FROM ubuntu:24.04
-
-ARG proj
-
-#ENV env_proj=$proj
+ARG UBUNTU_VERSION=24.04
+FROM ubuntu:${UBUNTU_VERSION}
 
 # MODIFICAMOS EL PATH
 ENV PATH="/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin"
+ENV DEBIAN_FRONTEND=noninteractive 
+
+ARG PYTHON_VERSION=3.10.14
+ARG OLS_VERSION=1.7.19
+ARG OLS_PASSWORD=12345
+ARG LSAPI_VERSION=2.1
+ARG PROJ_NAME=simple
 
 # PREPARAMOS LA IMAGEN
 RUN apt-get update
@@ -18,21 +21,21 @@ RUN apt install \
     default-libmysqlclient-dev libsqlite3-dev  pkg-config -y
 
 # INSTALAMOS PYTHON Y PIP
-RUN wget https://www.python.org/ftp/python/3.10.14/Python-3.10.14.tgz && tar -xf Python-3.10.14.tgz
-RUN cd Python-3.10.14 && ./configure --enable-optimizations && make install && \
-    rm -rf /Python-3.10.14 && rm /Python-3.10.14.tgz
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz && tar -xf Python-${PYTHON_VERSION}.tgz
+RUN cd Python-${PYTHON_VERSION} && ./configure --enable-optimizations && make install && \
+    rm -rf /Python-${PYTHON_VERSION} && rm /Python-${PYTHON_VERSION}.tgz
 
 # CONFIG PIP MYSQLCLIENT
 RUN export MYSQLCLIENT_CFLAGS=`pkg-config mysqlclient --cflags`
 RUN export MYSQLCLIENT_LDFLAGS=`pkg-config mysqlclient --libs`
 
 # INSTALAMOS OPENLITESPEED
-RUN wget https://openlitespeed.org/packages/openlitespeed-1.7.19.tgz && tar xzf openlitespeed-1.7.19.tgz
-COPY configs/ols.conf openlitespeed
+RUN wget https://openlitespeed.org/packages/openlitespeed-${OLS_VERSION}.tgz && tar xzf openlitespeed-${OLS_VERSION}.tgz
+COPY configs/ols.conf.seed openlitespeed
+RUN sed 's/#PASSWORD#/'"${OLS_PASSWORD}"'/g' /openlitespeed/ols.conf.seed > /openlitespeed/ols.conf
 RUN cd openlitespeed && ./install.sh && \
     echo 'cloud-docker' > /usr/local/lsws/PLAT && \
-    rm -rf /openlitespeed && rm /openlitespeed-1.7.19.tgz
-
+    rm -rf /openlitespeed && rm /openlitespeed-${OLS_VERSION}.tgz
 
 RUN mkdir /usr/local/lsws/conf/vhosts/container
 COPY configs/httpd_config.conf /usr/local/lsws/conf/
@@ -40,12 +43,12 @@ COPY configs/vhost.conf.seed /usr/local/lsws/conf/vhosts/container/
 COPY configs/admin_config.conf /usr/local/lsws/admin/conf/
 
 COPY configs/vhost.conf.seed /usr/local/lsws/conf/vhosts/container/
-RUN sed 's/#proyecto#/'"$proj"'/g' /usr/local/lsws/conf/vhosts/container/vhost.conf.seed > /usr/local/lsws/conf/vhosts/container/vhost.conf
+RUN sed 's/#PROJECT#/'"${PROJ_NAME}"'/g' /usr/local/lsws/conf/vhosts/container/vhost.conf.seed > /usr/local/lsws/conf/vhosts/container/vhost.conf
 
 # CREAMOS INTERPETRADOR DE PYTHON PARA OPENLITESPEED
-RUN wget http://www.litespeedtech.com/packages/lsapi/wsgi-lsapi-2.1.tgz && tar xf wsgi-lsapi-2.1.tgz
-RUN cd wsgi-lsapi-2.1 && python3 ./configure.py && make && cp lswsgi /usr/local/lsws/fcgi-bin/
-RUN rm -rf wsgi-lsapi-2.1 && rm wsgi-lsapi-2.1.tgz
+RUN wget http://www.litespeedtech.com/packages/lsapi/wsgi-lsapi-${LSAPI_VERSION}.tgz && tar xf wsgi-lsapi-${LSAPI_VERSION}.tgz
+RUN cd wsgi-lsapi-${LSAPI_VERSION} && python3 ./configure.py && make && cp lswsgi /usr/local/lsws/fcgi-bin/
+RUN rm -rf wsgi-lsapi-${LSAPI_VERSION} && rm wsgi-lsapi-${LSAPI_VERSION}.tgz
 
 # CREAMOS LAS CARPETAS DE APLICACIÓN
 RUN mkdir /usr/local/lsws/container

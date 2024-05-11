@@ -21,7 +21,7 @@ context / {
   location                /usr/local/lsws/container/public/
   binPath                 /usr/local/lsws/fcgi-bin/lswsgi
   appType                 wsgi
-  startupFile             #proyecto#/wsgi.py
+  startupFile             #PROJECT#/wsgi.py
   maxConns                100
   env                     PYTHONPATH=/usr/local/lsws/container/env/lib/python3.10:/usr/local/lsws/container/public
   env                     LS_PYTHONBIN=/usr/local/lsws/container/env/bin/python
