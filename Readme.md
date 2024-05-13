@@ -2,38 +2,59 @@
 
 Todas as imaxes van con php instalado, xa que o necesitan para a web de administracion (que tamén se pode deshabilitar), pero non soe ser muy actual.
 
-En este momento a máquina instala o seguinte software:
+En este momento a máquina instala o seguinte software por defecto:
 - Ubuntu 24.04 LST
 - OpenLiteSpeed 1.7.19 (A versión estable)
+- Python 3.10.14
+- Python WSGI LSAPI 2.1 (Para Python 3.10)
+- Drivers de base de datos sqllite e myslq para Python (as aplicacións clientes)
 
 > [!IMPORTANT]
 > As aplicacións despleganse mediante LSAPI:
 > https://www.litespeedtech.com/docs/lsapi
 
-## Python:
-Aplicacións instaladas:
-- Python 3.10.14
-- Python WSGI LSAPI 2.1 (Para Python 3.10)
-- Drivers de base de datos sqllite e myslq para Python (as aplicacións clientes)
-
-### Creación de la imagen en Docker
-```
-docker build --tag ols:1.0.0 -- build-arg proj=simple .
+### Creación de la imagen en Dockerfile
+```bash
+docker build --tag ols:1.0.0 .
 ```
 
 ### Lanzamiento del contenedor
-```
+```bash
 docker run -d -p 80:80 -p 7080:7080 ols:1.0.0
+```
+
+### Creación con docker compose
+```bash
+docker compose -p ols up -d
+```
+
+### Eliminación con docker compose
+```bash
+docker compose -p ols down --rmi all
+```
+
+### Eliminación con docker compose
+Tanto con docker como con docker compose estes son os argumentos para crear a aplicación:
+
+```bash
+UBUNTU_VERSION=24.04        # Versiónd e Ubuntu a instalar
+PYTHON_VERSION=3.10.14      # Versión de Python a instalar
+OLS_VERSION=1.7.19          # Versión de OpenLiteSpeed a instalar
+OLS_ADMIN=ALLOW             # Activar ou non o panel administrador de OpenLiteSpeed (ALLOW|DENY)
+OLS_ADMIN_USER=admin        # Login do usuario administrador
+OLS_ADMIN_PASS=12345        # Password do usuairo administrador
+LSAPI_VERSION=2.1           # Versión do lsapi a instalar
+PROJ_NAME=simple            # Nome do proxecto de Django onde está o archivo wsgi.py
 ```
 
 ### Estrucutura datos
 
 ```bash
 ├── configs
-│   ├── admin_config.conf # configuración do portal de administración de OpenLiteSpeed
-│   ├── http_config.conf  # configuración do servidor web principal
-│   ├── ols.conf          # configuración da instalación de OpenLiteSpeed
-│   └── vhost.conf.seed   # configuración do host da apliación de Python
+│   ├── admin_config.conf.seed  # configuración do portal de administración de OpenLiteSpeed
+│   ├── http_config.conf        # configuración do servidor web principal
+│   ├── ols.conf                # configuración da instalación de OpenLiteSpeed
+│   └── vhost.conf.seed         # configuración do host da apliación de Python
 ├── web
 │   ├── logs              # carpeta que se uutiliza para os logs do vhost
 │   ├── private           # aquí gardamos os archivos de configuración da aplicación (secret.json, requirements.txt)

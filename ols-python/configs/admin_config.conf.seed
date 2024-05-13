@@ -16,8 +16,7 @@ accessLog $SERVER_ROOT/admin/logs/access.log {
 }
 
 accessControl {
-  allow                 ALL
-#  deny                  ALL
+  #ADMIN#               ALL
 }
 
 listener adminListener{

@@ -7,7 +7,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ARG PYTHON_VERSION=3.10.14
 ARG OLS_VERSION=1.7.19
-ARG OLS_PASSWORD=12345
+ARG OLS_ADMIN=ALLOW        
+ARG OLS_ADMIN_USER=admin
+ARG OLS_ADMIN_PASS=12345 
 ARG LSAPI_VERSION=2.1
 ARG PROJ_NAME=simple
 
@@ -32,7 +34,7 @@ RUN export MYSQLCLIENT_LDFLAGS=`pkg-config mysqlclient --libs`
 # INSTALAMOS OPENLITESPEED
 RUN wget https://openlitespeed.org/packages/openlitespeed-${OLS_VERSION}.tgz && tar xzf openlitespeed-${OLS_VERSION}.tgz
 COPY configs/ols.conf.seed openlitespeed
-RUN sed 's/#PASSWORD#/'"${OLS_PASSWORD}"'/g' /openlitespeed/ols.conf.seed > /openlitespeed/ols.conf
+RUN sed -e 's/#USER#/'"${OLS_ADMIN_USER}"'/g' -e 's/#PASSWORD#/'"${OLS_ADMIN_PASS}"'/g' /openlitespeed/ols.conf.seed > /openlitespeed/ols.conf
 RUN cd openlitespeed && ./install.sh && \
     echo 'cloud-docker' > /usr/local/lsws/PLAT && \
     rm -rf /openlitespeed && rm /openlitespeed-${OLS_VERSION}.tgz
@@ -40,7 +42,9 @@ RUN cd openlitespeed && ./install.sh && \
 RUN mkdir /usr/local/lsws/conf/vhosts/container
 COPY configs/httpd_config.conf /usr/local/lsws/conf/
 COPY configs/vhost.conf.seed /usr/local/lsws/conf/vhosts/container/
-COPY configs/admin_config.conf /usr/local/lsws/admin/conf/
+
+COPY configs/admin_config.conf.seed /usr/local/lsws/admin/conf/
+RUN sed 's/#ADMIN#/'"${OLS_ADMIN}"'/g' /usr/local/lsws/admin/conf/admin_config.conf.seed > /usr/local/lsws/admin/conf/admin_config.conf
 
 COPY configs/vhost.conf.seed /usr/local/lsws/conf/vhosts/container/
 RUN sed 's/#PROJECT#/'"${PROJ_NAME}"'/g' /usr/local/lsws/conf/vhosts/container/vhost.conf.seed > /usr/local/lsws/conf/vhosts/container/vhost.conf

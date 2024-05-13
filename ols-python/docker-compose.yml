@@ -1,0 +1,24 @@
+services:
+  web:
+    container_name: ols_web
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - UBUNTU_VERSION=24.04
+        - PYTHON_VERSION=3.10.14
+        - OLS_VERSION=1.7.19
+        - OLS_ADMIN=ALLOW 
+        - OLS_ADMIN_USER=admin
+        - OLS_ADMIN_PASS=12345
+        - OLS_PASSWORD=12345
+        - LSAPI_VERSION=2.1
+        - PROJ_NAME=simple
+    ports:
+      - 80:80
+      - 7080:7080
+    networks:
+      - front
+
+networks: 
+  front: {}
